@@ -81,7 +81,7 @@ def main():
     logging.basicConfig(level=logging.NOTSET)
 
     options = webdriver.ChromeOptions()
-    options.add_argument(r"user-data-dir=C:\Users\Tim Wang\AppData\Local\Google\Chrome\User Data")
+    options.add_argument(r"user-data-dir=C:\Users\tiwang\AppData\Local\Google\Chrome\User Data")
     options.add_argument(r"profile-directory=Profile 1")
     driver = webdriver.Chrome(r'./chromedriver.exe', chrome_options=options)
     driver.get("https://www.hpool.com/center/machine")
