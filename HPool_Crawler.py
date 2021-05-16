@@ -20,10 +20,10 @@ def DailyAverage():
         cache.append(pd.read_csv(file))
     full = pd.concat(cache, join='outer', axis=0, ignore_index=True)
     full = full.drop('Unnamed: 0', axis=1)
-    print(full.shape)
+    full = full.fillna(0)
     full = full.sum(axis=0) / full.shape[0]
     full = pd.DataFrame(full, columns=['Average']).T
-    full.to_csv(str(Path.cwd() / Path(f'{current_time}.csv')))
+    full.to_csv(str(Path.cwd() /  Path(f'{current_time}.csv')))
     return full
 
 
