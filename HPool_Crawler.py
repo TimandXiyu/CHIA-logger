@@ -6,25 +6,38 @@ import json
 import re
 from pathlib import Path
 import pandas as pd
-from glob import glob
 
 
 def DailyAverage():
     """
     :param date: date formatted as yyyy-mm-dd-hh-mm
     """
-    current_time = datetime.datetime.now().strftime('%Y-%m-%d')
-    today = glob(f'./{current_time}-*.csv')
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    yesterday = (datetime.datetime.today() + datetime.timedelta(days=-1)).strftime('%Y-%m-%d')
+    glob_today = [f'./{today}-00-00.csv',
+                  f'./{today}-01-00.csv',
+                  f'./{today}-02-00.csv',
+                  f'./{today}-03-00.csv',
+                  f'./{today}-04-00.csv',
+                  f'./{today}-05-00.csv',
+                  f'./{today}-06-00.csv',
+                  f'./{today}-07-00.csv',
+                  f'./{today}-08-00.csv',
+                  f'./{today}-09-00.csv',
+                  f'./{today}-10-00.csv',
+                  f'./{today}-11-00.csv',
+                  f'./{today}-12-00.csv']
+    glob_yesterday = [f'./{yesterday}-{x}-00.csv' for x in range(13, 24)]
+    fuse = glob_today + glob_yesterday
     cache = []
-    for file in today:
-        cache.append(pd.read_csv(file))
+    for file in fuse:
+        if Path(file).exists():
+            cache.append(pd.read_csv(file))
     full = pd.concat(cache, join='outer', axis=0, ignore_index=True)
     full = full.drop('Unnamed: 0', axis=1)
-    full = full.fillna(0)
     full = full.sum(axis=0) / full.shape[0]
     full = pd.DataFrame(full, columns=['Average']).T
-    full.to_csv(str(Path.cwd() /  Path(f'{current_time}.csv')))
-    return full
+    full.to_csv(str(Path.cwd() /  Path(f'{today}.csv')))
 
 
 def Convert2Tera(raw):
